@@ -5,22 +5,25 @@ namespace thans\jwt;
 use thans\jwt\exception\BadMethodCallException;
 use thans\jwt\parser\Parser;
 use thans\jwt\exception\JWTException;
+use think\Request;
 
 class JWT
 {
     protected $manager;
     protected $parser;
     protected $token;
+    protected $request;
 
     public function parser()
     {
         return $this->parser;
     }
 
-    public function __construct(Manager $manager, Parser $parser)
+    public function __construct(Manager $manager, Parser $parser, Request $request)
     {
         $this->manager = $manager;
         $this->parser = $parser;
+        $this->request = $request;
     }
 
     public function createToken($customerClaim = [])
@@ -92,7 +95,14 @@ class JWT
         return $this->manager->refresh($this->token)->get();
     }
 
-
+    /**
+     * 获取当前guard
+     * @return [type] [description]
+     */
+    public function getGuard()
+    {
+        return $this->manager->guard;
+    }
 
     public function __call($method, $parameters)
     {

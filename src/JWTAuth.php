@@ -3,6 +3,8 @@
 namespace thans\jwt;
 
 use thans\jwt\parser\Parser;
+use thans\jwt\provider\JWT as JWTProvider;
+use think\App;
 
 class JWTAuth extends JWT
 {
@@ -19,6 +21,18 @@ class JWTAuth extends JWT
     {
         $this->manager->setValidate($validate);
         return (array)$this->getPayload();
+    }
+
+    /**
+     * 切换guard配置
+     * @param  string $guard [description]
+     * @return [type]        [description]
+     */
+    public function guard(string $guard)
+    {
+        (new JWTProvider($this->request))->setGuard($guard)->init();
+
+        return App::getInstance()->make('thans\jwt\JWTAuth');
     }
 
     /**

@@ -21,11 +21,13 @@ class BaseMiddleware
         $token = $token ?: $this->auth->refresh();
         $this->auth->setToken($token);
 
-        if (in_array('cookie', Config::get('jwt.token_mode'))) {
+        $guard = $this->auth->getGuard();
+
+        if (in_array('cookie', Config::get("jwt.guards.{$guard}.token_mode"))) {
             Cookie::set('token', $token);
         }
 
-        if (in_array('header', Config::get('jwt.token_mode'))) {
+        if (in_array('header', Config::get("jwt.guards.{$guard}.token_mode"))) {
             $response = $response->header(['Authorization' => 'Bearer '.$token]);
         }
 

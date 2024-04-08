@@ -4,7 +4,7 @@ namespace thans\jwt;
 
 use thans\jwt\exception\TokenBlacklistException;
 use thans\jwt\exception\TokenBlacklistGracePeriodException;
-use thans\jwt\provider\JWT\Provider;
+use thans\jwt\provider\JWT\Lcobucci;
 
 class Manager
 {
@@ -18,14 +18,18 @@ class Manager
 
     protected $validate = true;
 
+    public $guard;
+
     public function __construct(
+        $guard,
         Blacklist $blacklist,
         Payload $payload,
-        Provider $provider
+        Lcobucci $provider
     ) {
         $this->blacklist = $blacklist;
         $this->payload = $payload;
         $this->provider = $provider;
+        $this->guard = $guard;
     }
 
     /**
